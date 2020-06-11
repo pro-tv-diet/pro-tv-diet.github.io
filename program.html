@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="eu" ng-app="Diet" ng-controller="MainCtrl">
+<head>
+    <title>O metodă foarte eficientă și testată pentru a slăbi</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0" name="viewport">
+    <link href="https://fonts.googleapis.com/css?family=Karla|Lato&amp;subset=latin-ext" rel="stylesheet">
+    <link href="./css/main.css" rel="stylesheet" type="text/css">
+
+</head>
+<body ng-cloak ng-class="{'desktop-bg':!landing, 'no-bg': showUserResult}">
+<div id="landing" ng-show="landing">
+    <div class="container">
+        <div class="logo">
+            <img src="./img/logo.gif" alt="" class="regular-logo">
+            <span>O metodă foarte eficientă<br> și testată pentru a slăbi</span>
+        </div>
+        <div class="descr">
+            <p>Alătură-te experimentului nostru social </p>
+            <h1>
+                Slăbiți în fiecare zi fără efort! Descoperiți cea mai simplă metodă
+            </h1>
+            <p class="text-desc">Data cursului: <span>{{today}}</span>. Numărul de participanți este limitat. Pentru a participa la acest curs trebuie să răspunzi la câteva întrebări simple:</p>
+        </div>
+        <div class="gender-description">
+            Selectează sexul tău:
+        </div>
+        <div class="gender-buttons">
+            <button class="btn btn-female" data-gender="female" ng-click="startQuestion()">
+                <span class="icon"><img src="./img/female.svg" alt="Female"></span>
+                Femeie
+                <img src="./img/forward-female.svg" class="forward">
+            </button>
+            <button class="btn btn-male" data-gender="male" ng-click="startQuestion()">
+                <span class="icon"><img src="./img/male.svg" alt="Male"></span>
+                Bărbat
+                <img src="./img/forward-male.svg" class="forward">
+            </button>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4 copyright">
+                2020 © Slăbiți în fiecare zi fără efort! Descoperiți cea mai simplă metodă<br>
+                Cost serviciu: 1.7 Euro+TVA/minut
+            </div>
+        </div>
+    </div>
+</div>
+<div id="desktop-container" ng-class="{'desktop-container': showQuestion}">
+    <nav class="mainNavbar navbar navbar-expand-lg" ng-show="showQuestion">
+        <div class="container">
+            <img src="./img/back.svg" alt="Back" class="btn-back" ng-click="prevQuestion()">
+            <div class="navbar-brand">
+                <img src="./img/logo.gif" alt="" class="regular-logo">
+            </div>
+        </div>
+    </nav>
+    <div class="subheader" ng-show="showQuestion">
+        <div class="progress-bar">
+            <div id="progress" class="progress"></div>
+        </div>
+    </div>
+    <div class="container" ng-show="showQuestion">
+        <div ng-hide="currentIndex === questionList.length" id="step-{{$index+1}}" class="step" ng-class="{'active' : currentIndex === $index}" ng-repeat="q in questionList track by $index">
+            <div class="question" ng-bind-html="q.question"></div>
+            <div class="question-description" ng-if="q.hint" ng-bind-html="q.hint"></div>
+            <div ng-class="q.type === 'checkbox' ? 'fancy-checkbox-holder' : 'fancy-radio-holder'">
+                <div class="fancy-radio fancy-radio-{{a.id}}" ng-repeat="a in q.answers track by a.id" ng-class="{'active':a.active, 'with-icon':a.img}" ng-click="checkAnswer(q.answers, q.type)">
+                    <div class="icon" ng-if="a.img">
+                        <img ng-src="./img/{{a.img}}" class="svg" alt="{{a.answer}}">
+                    </div>
+                    {{a.answer}}
+                    <div class="status"></div>
+                    <div class="status-icon">{{a.active ? '+' : '-'}}</div>
+                </div>
+            </div>
+            <div class="alert alert-danger" ng-show="errorMessage" ng-bind-html="errorMessage"></div>
+            <button class="btn btn-primary btn-next-step btn-next-step-{{$index+1}}" ng-click="nextQuestion(q)" >Next</button>
+        </div>
+    </div>
+    <div id="step-8" class="step results active" ng-show="showUserResult">
+        <div class="summary-container">
+            <div class="container">
+                <div class="logo">
+                    <img src="./img/logo.gif" alt="" class="results-logo">
+                    <span>O metodă foarte eficientă<br> și testată pentru a slăbi</span>
+                </div>
+
+                <div class="result-desc">
+                    <p class="text-desc">Îți mulțumim pentru răspunsuri. </p>
+                    <h3 class="animated pulse infinite">Felicitări! Ai fost selectat pentru cursul nostru.</h3>
+                    <p class="subheading">
+                        Au rămas doar două etape pentru a finaliza înregistrarea și pentru a beneficia de acces complet:
+                    </p>
+                    <p class="subheading bold">
+                        - Confirmă participarea sunând la 0903120261<br>
+                        - Ascultă recomandările specialiștilor noștri.
+                    </p>
+                    <p class="subheading">
+                        <span>Atenție!</span> Cererea ta este valabilă doar <span>20 de minute</span>. Îți recomandăm să confirmi înregistrarea chiar acum. Mai sunt doar 2 locuri disponibile!
+                    </p>
+                </div>
+                <a href="tel:0903120261" class="btn btn-primary scroll-btn call-button"><img src="img/button-call.png" alt=""  class="tada animated infinite">Asculta Mesajul</a>
+            </div>
+            <div class="footer-container container" id="summary-footer">
+                <div class="row">
+                    <div class="col-xs-12 col-lg-4 copyright">
+                        2020 © Slăbiți în fiecare zi fără efort! Descoperiți cea mai simplă metodă<br>
+                        Cost serviciu: 1.7 Euro+TVA/minut
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="loading-modal" ng-class="{'fadeIn animated':loading}" ng-show="loading">
+    <div class="loading-modal-container">
+        <div class="img-container animated pulse infinite">
+            <img src="img/load.gif" alt="">
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="./js/main.js"></script>
+</body>
+</html>
